@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: Calendar date dimension used by the mart layer.
+
+    columns:
+
+      - name: date_key
+        description: Surrogate key in YYYYMMDD format.
+        tests:
+          - unique
+          - not_null
+
+      - name: full_date
+        description: Calendar date.
+
+      - name: day_name
+        description: Full day name.
+
+      - name: month_name
+        description: Full month name.
+
+      - name: quarter_name
+        description: Quarter label.
+
+      - name: year_number
+        description: Calendar year.
+
+      - name: is_weekend
+        description: Indicates whether the date falls on a weekend.

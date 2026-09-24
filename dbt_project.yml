@@ -1,37 +1,50 @@
-name: 'dbt_medallion_snowflake'
+name: 'dbt_snowflake_demo'
 version: '1.0'
 config-version: 2
 
-profile: 'dbt_medallion_snowflake'
+profile: 'dbt_snowflake_demo'
+
 vars:
   surrogate_key_treat_nulls_as_empty_strings: true
+
 model-paths: ["models"]
 seed-paths: ["seeds"]
-analysis-paths: ["analysis"]
+analysis-paths: ["analyses"]
 test-paths: ["tests"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
+
 target-path: "target"
+
 clean-targets:
   - "target"
   - "dbt_packages"
 
 models:
-  dbt_medallion_snowflake:
-    +materialized: view
+  dbt_snowflake_demo:
 
-    010_bronze:
-      +schema: bronze
-      +materialized: table
+    +transient: false
 
-    020_silver:
-      +schema: silver
-      +materialized: table
+    staging:
+      +materialized: view
+      +schema: STAGING
+      +snowflake_warehouse: "{{ target.warehouse }}"
 
-    030_gold:
-      +schema: gold
+    intermediate:
       +materialized: table
+      +schema: INTERMEDIATE
+      +snowflake_warehouse: "{{ target.warehouse }}"
+
+    marts:
+      +materialized: table
+      +schema: MARTS
+      +snowflake_warehouse: "{{ target.warehouse }}"
 
 seeds:
-  dbt_medallion_snowflake:
-    +schema: raw
+  dbt_snowflake_demo:
+    +schema: RAW
+
+    dim_date:
+      +column_types:
+        DATE_KEY: NUMBER(8,0)
+        FULL_DATE: DATE

@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: >
+      Fact table containing order-level metrics derived from TPCH Orders and
+      Line Items data. This table is the central fact table of the MART layer.
+
+    columns:
+
+      - name: order_key
+        description: Unique identifier of the order.
+        tests:
+          - unique
+          - not_null
+
+      - name: customer_key
+        description: Identifier of the customer who placed the order.
+
+      - name: order_date
+        description: Date on which the order was created.
+
+      - name: order_date_key
+        description: Surrogate key linking to DIM_DATE.DATE_KEY.
+
+      - name: status_code
+        description: >
+          Order status:
+          O = Open,
+          F = Fulfilled,
+          P = Processing.
+        tests:
+          - accepted_values:
+              values: ['O', 'F', 'P']
+
+      - name: total_price
+        description: Total amount of the order.
+
+      - name: gross_item_sales_amount
+        description: Total gross sales amount before discounts.
+
+      - name: item_discount_amount
+        description: Total discount amount applied to order items.
+
+      - name: net_item_sales_amount
+        description: Gross sales amount minus discounts.
+
+      - name: tax_amount
+        description: Total tax amount for all order items.
+
+      - name: item_count
+        description: Number of items included in the order.
+
+      - name: quantity_sold
+        description: Total quantity sold for the order.
+
+      - name: average_discount_pct
+        description: Average discount percentage applied to order items.
+
+      - name: average_tax_pct
+        description: Average tax percentage applied to order items.
