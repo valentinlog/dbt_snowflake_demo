@@ -59,7 +59,7 @@ jobs:
               echo "target=uat" >> "$GITHUB_OUTPUT"
               echo "Deploying to UAT"
               ;;
-            main)
+            prod)
               echo "target=prod" >> "$GITHUB_OUTPUT"
               echo "Deploying to PROD"
               ;;
