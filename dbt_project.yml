@@ -28,17 +28,17 @@ models:
     staging:
       +materialized: view
       +schema: STAGING
-      +snowflake_warehouse: "{{ target.warehouse }}"
+      +snowflake_warehouse: DBT_DEV_WH
 
     intermediate:
       +materialized: table
       +schema: INTERMEDIATE
-      +snowflake_warehouse: "{{ target.warehouse }}"
+      +snowflake_warehouse: DBT_QA_WH
 
     marts:
       +materialized: table
       +schema: MARTS
-      +snowflake_warehouse: "{{ target.warehouse }}"
+      +snowflake_warehouse: DBT_PROD_WH
 
 seeds:
   dbt_snowflake_demo:
