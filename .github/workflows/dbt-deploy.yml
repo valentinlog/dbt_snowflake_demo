@@ -9,6 +9,9 @@ on:
       - uat
       - main
 
+permissions:
+  contents: read
+
 env:
   DBT_SNOWFLAKE_ACCOUNT: ${{ secrets.DBT_SNOWFLAKE_ACCOUNT }}
   DBT_SNOWFLAKE_USER: ${{ secrets.DBT_SNOWFLAKE_USER }}
@@ -29,6 +32,12 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Cache dbt packages
+        uses: actions/cache@v4
+        with:
+          path: dbt_packages
+          key: ${{ runner.os }}-dbt-${{ hashFiles('packages.yml') }}
+
       - name: Install dbt
         run: |
           python -m pip install --upgrade pip
@@ -46,7 +55,7 @@ jobs:
               echo "target=dev" >> "$GITHUB_OUTPUT"
               echo "Deploying to DEV"
               ;;
-            qa)
+            uat)
               echo "target=uat" >> "$GITHUB_OUTPUT"
               echo "Deploying to UAT"
               ;;
@@ -60,19 +69,12 @@ jobs:
               ;;
           esac
 
-      - name: dbt debug
-        run: |
-          dbt debug \
-            --profiles-dir . \
-            --target ${{ steps.target.outputs.target }}
-
-      - name: dbt deps
+      - name: Install dbt packages
         run: |
           dbt deps \
-            --profiles-dir . \
-            --target ${{ steps.target.outputs.target }}
+            --profiles-dir .
 
-      - name: dbt build
+      - name: Run dbt build
         run: |
           dbt build \
             --profiles-dir . \
