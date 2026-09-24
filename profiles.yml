@@ -1,0 +1,28 @@
+dbt_snowflake_demo:
+  target: dev
+
+  outputs:
+
+    dev:
+      type: snowflake
+      role: ACCOUNTADMIN
+      database: DBT_DEV_DB
+      warehouse: DBT_DEV_WH
+      schema: STAGING
+      threads: 7
+
+    uat:
+      type: snowflake
+      role: ACCOUNTADMIN
+      database: DBT_UAT_DB
+      warehouse: DBT_UAT_WH
+      schema: STAGING
+      threads: 7
+
+    prod:
+      type: snowflake
+      role: ACCOUNTADMIN
+      database: DBT_PRD_DB
+      warehouse: DBT_PRD_WH
+      schema: STAGING
+      threads: 7
