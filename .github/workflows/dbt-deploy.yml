@@ -20,7 +20,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy to ${{ github.ref_name }}
+    name: Deploy to ${{ github.ref_name == 'main' && 'PROD' || github.ref_name == 'uat' && 'UAT' || 'DEV' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -43,9 +43,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install dbt-snowflake==1.12.0
 
-      - name: Check dbt version
-        run: dbt --version
-
       - name: Set dbt target
         id: target
         shell: bash
@@ -53,15 +50,15 @@ jobs:
           case "${GITHUB_REF_NAME}" in
             dev)
               echo "target=dev" >> "$GITHUB_OUTPUT"
-              echo "Deploying to DEV"
+              echo "🚀 Deploying to DEV"
               ;;
             uat)
               echo "target=uat" >> "$GITHUB_OUTPUT"
-              echo "Deploying to UAT"
+              echo "🚀 Deploying to UAT"
               ;;
-            prod)
+            main)
               echo "target=prod" >> "$GITHUB_OUTPUT"
-              echo "Deploying to PROD"
+              echo "🚀 Deploying to PROD"
               ;;
             *)
               echo "Unsupported branch: ${GITHUB_REF_NAME}"
@@ -71,8 +68,7 @@ jobs:
 
       - name: Install dbt packages
         run: |
-          dbt deps \
-            --profiles-dir .
+          dbt deps --profiles-dir .
 
       - name: Run dbt build
         run: |
