@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - dev
-      - qa
+      - uat
       - main
 
 env:
@@ -47,8 +47,8 @@ jobs:
               echo "Deploying to DEV"
               ;;
             qa)
-              echo "target=qa" >> "$GITHUB_OUTPUT"
-              echo "Deploying to QA"
+              echo "target=uat" >> "$GITHUB_OUTPUT"
+              echo "Deploying to UAT"
               ;;
             main)
               echo "target=prod" >> "$GITHUB_OUTPUT"
